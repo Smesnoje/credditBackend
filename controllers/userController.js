@@ -17,8 +17,7 @@ const createNewUser = async (req, res, next) => {
     } catch (err) {
         console.log('something went wrong while creating the user')
     }
-    
-    next()
+    res.status(201).send("User created!")
 }
 
 exports.createNewUser = createNewUser
