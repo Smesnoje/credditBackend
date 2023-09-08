@@ -1,16 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose')
-const { createNewUser } = require('./controllers/userController')
+const userRoutes = require('./routes/userRoutes')
+const threadRoutes = require('./routes/threadRoutes')
 
 const app = express();
 
 app.use(express.json())
 
-app.get("/", (req,res,next)=>{
-    res.send('milivoje naredjuje')
-})
-
-app.post("/signup", createNewUser)
+app.use("/api/user", userRoutes)
+app.use("/api/thread", threadRoutes)
 
 const main = async ()=>{
     await mongoose.connect('mongodb+srv://admin:admin@cluster0.2oxxltl.mongodb.net/?retryWrites=true&w=majority')
