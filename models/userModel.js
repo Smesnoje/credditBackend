@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema(
         joinedThreads: [{type: mongoose.Schema.Types.ObjectId, ref: 'thread'}],
         ownedThreads: [{type: mongoose.Schema.Types.ObjectId, ref: 'thread'}],
         posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
-        comment: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}]
+        comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}]
     }
 )
 
