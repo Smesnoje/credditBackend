@@ -49,4 +49,38 @@ const createNewComment = async (req, res, next) => {
   }
 };
 
+const getAllPostComments = async (req, res, next) => {
+  const data = req.body
+
+  const postId = data.postId
+
+  let allPostComments
+
+  try {
+    allPostComments = await comment.find({post: postId}).exec()
+  } catch (err) {
+    console.log(err)
+  }
+
+  res.status(200).send(allPostComments)
+}
+
+const getAllUserComments = async (req, res, next) => {
+  const data = req.body
+
+  const authorId = data.authorId
+
+  let allUserComments
+
+  try {
+    allUserComments = await comment.find({author: authorId}).exec()
+  } catch (err) {
+    console.log(err)
+  }
+
+  res.status(200).send(allUserComments)
+}
+
 exports.createNewComment = createNewComment;
+exports.getAllPostComments = getAllPostComments
+exports.getAllUserComments = getAllUserComments

@@ -3,6 +3,7 @@ const post = require("../models/postModel");
 const user = require("../models/userModel.js")
 const thread = require("../models/threadModel")
 
+
 const createNewPost = async (req, res, next) => {
   const data = req.body;
 
@@ -12,11 +13,6 @@ const createNewPost = async (req, res, next) => {
     thread: data.threadId,
     author: data.authorId,
   });
-  //   try{
-  //       postAuthor await mongoose.findById(data.authorId);
-  //   } catch(err){
-  //       console.log(err)
-  //   }
 
   let savedPost;
   let savedPostAuthor;
@@ -47,7 +43,42 @@ const createNewPost = async (req, res, next) => {
   } catch(err){
     console.log(err);
   }
-
 };
 
+
+const getAllThreadPosts = async (req, res, next) => {
+  const data = req.body
+
+  const threadId = data.threadId
+
+  let allThreadPosts
+
+  try {
+    allThreadPosts = await post.find({thread: threadId}).exec()
+  } catch (err) {
+    console.log(err)
+  }
+
+  res.status(200).send(allThreadPosts)
+}
+
+
+const getAllUserPosts = async (req, res, next) => {
+  const data = req.body
+
+  const authorId = data.authorId
+
+  let allUserPosts
+
+  try {
+    allUserPosts = await post.find({author: authorId}).exec()
+  } catch (err) {
+    console.log(err)
+  }
+
+  res.status(200).send(allUserPosts)
+}
+
 exports.createNewPost = createNewPost;
+exports.getAllThreadPosts = getAllThreadPosts
+exports.getAllUserPosts = getAllUserPosts
