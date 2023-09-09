@@ -1,59 +1,82 @@
-const mongoose = require('mongoose')
-const user = require('../models/userModel')
-
+const mongoose = require("mongoose");
+const user = require("../models/userModel");
 
 const createNewUser = async (req, res, next) => {
-    const data = req.body
+  const data = req.body;
 
-    try {
-        const fetchedUserByUsername = await user.findOne({username: data.username}).exec()
-        const fetchedUserByEmail = await user.findOne({email: data.email}).exec()
-        if (fetchedUserByUsername || fetchedUserByEmail) {
-            res.status(409).send("Credentials are not unique!")
-            return next()
-        }
-    } catch (err) {
-        console.log(err)
+  try {
+    const fetchedUserByUsername = await user
+      .findOne({ username: data.username })
+      .exec();
+    const fetchedUserByEmail = await user.findOne({ email: data.email }).exec();
+    if (fetchedUserByUsername || fetchedUserByEmail) {
+      res.status(409).send("Credentials are not unique!");
+      return next();
     }
+  } catch (err) {
+    console.log(err);
+  }
 
-    
+  const newUser = new user({
+    username: data.username,
+    password: data.password,
+    email: data.email,
+    profilePicture: data.profilePicture,
+  });
 
-    const newUser = new user({
-        username: data.username,
-        password: data.password,
-        email: data.email,
-        profilePicture: data.profilePicture,
-    })
-
-    try{
-        await newUser.save()
-        console.log(newUser)
-    } catch (err) {
-        console.log('something went wrong while creating the user')
-    }
-    res.status(201).send("User created!")
-}
-
+  try {
+    await newUser.save();
+    console.log(newUser);
+  } catch (err) {
+    console.log("something went wrong while creating the user");
+  }
+  res.status(201).send("User created!");
+};
 
 const getUser = async (req, res, next) => {
-    const data = req.body
+  const data = req.body;
 
-    const username = data.username
+  const username = data.username;
 
-    let fetchedUser
-    try {
-        fetchedUser = await user.findOne({username: username}).exec()
+  let fetchedUser;
+  try {
+    fetchedUser = await user.findOne({ username: username }).exec();
 
-        if (fetchedUser) {
-            res.status(200).send(fetchedUser)
-        } else {
-            res.status(404).send("User not found!")
-        }
-
-    } catch (err) {
-        console.log(err)
+    if (fetchedUser) {
+      res.status(200).send(fetchedUser);
+    } else {
+      res.status(404).send("User not found!");
     }
-}
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-exports.createNewUser = createNewUser
-exports.getUser = getUser
+const loginUser = async (req, res, next) => {
+  const data = req.body;
+  const username = data.username;
+  const password = data.password;
+  let fetchedUser;
+  try {
+    fetchedUser = await user.findOne({ username: username }).exec();
+    if (fetchedUser) {
+      if (fetchedUser.password === password) {
+        console.log("successfull login");
+        console.log(fetchedUser);
+        res.status(200).send(fetchedUser);
+      }
+    } else {
+      console.log("Login failed");
+      res.status(404).send("User not found");
+      
+    }
+    return next()
+  } catch (err) {
+    console.log(err);
+    console.log("there was issues logging in");
+  }
+};
+
+exports.createNewUser = createNewUser;
+exports.getUser = getUser;
+exports.loginUser = loginUser;
