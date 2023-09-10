@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 const cors = (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001')
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
 
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
@@ -23,6 +23,8 @@ const cors = (req, res, next) => {
 
   next()
 }
+
+app.use(cors)
 
 app.use("/api/user", userRoutes);
 app.use("/api/thread", threadRoutes);
