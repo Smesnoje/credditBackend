@@ -61,6 +61,7 @@ const loginUser = async (req, res, next) => {
     fetchedUser = await user.findOne({ username: username }).exec();
     if (fetchedUser) {
       if (fetchedUser.password === password) {
+        req.session.userId = fetchedUser._id
         console.log("successfull login");
         console.log(fetchedUser);
         res.status(200).send(fetchedUser);
@@ -77,6 +78,14 @@ const loginUser = async (req, res, next) => {
   }
 };
 
+const logoutUser = (req, res, next) => {
+  req.session.destroy()
+  res.clearCookie('creddit-user-token', { path: '/' });  
+  res.send('Logout successful')
+  console.log('Logout successful')
+}
+
 exports.createNewUser = createNewUser;
 exports.getUser = getUser;
 exports.loginUser = loginUser;
+exports.logoutUser = logoutUser
