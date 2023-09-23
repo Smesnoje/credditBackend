@@ -6,6 +6,8 @@ const threadRoutes = require("./routes/threadRoutes");
 const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes")
 
+
+
 const app = express();
 
 app.use(express.json());
@@ -17,6 +19,15 @@ app.use(session({
   name: 'creddit-user-token',
   cookie: { secure: false, maxAge: 600000000 }
 }));
+
+function checkSession(req,res,next){
+  console.log(req.session.userId)
+  const currentUserId = req.session.userId;
+
+  res.send(`current user is ${currentUserId}`)
+  next();
+}
+
 
 const cors = (req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
@@ -32,6 +43,12 @@ const cors = (req, res, next) => {
 
   next()
 }
+
+
+
+
+
+
 
 app.use(cors)
 

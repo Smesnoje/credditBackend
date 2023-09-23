@@ -85,7 +85,20 @@ const logoutUser = (req, res, next) => {
   console.log('Logout successful')
 }
 
+const getLoggedInUser = (req, res, next)=>{
+  if (req.session.userId){
+    const currentUserId = req.session.userId;
+    res.send(currentUserId)
+    res.status(200)
+  }
+  else{
+    res.send('Login again')
+    res.status(404)
+  }
+}
+
 exports.createNewUser = createNewUser;
 exports.getUser = getUser;
 exports.loginUser = loginUser;
 exports.logoutUser = logoutUser
+exports.getLoggedInUser = getLoggedInUser;
